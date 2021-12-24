@@ -102,21 +102,12 @@ void matrix_init_user(void) {
 #endif
 }
 
-static bool is_alt_tab_active = false;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case KC_LALT:
-            if (record->event.pressed) {
-                is_alt_tab_active = true;
-            } else {
-                is_alt_tab_active = false;
-            }
-            return true;
         case KC_F13:
         case KC_F14:
             if (record->event.pressed) {
-                if (is_alt_tab_active) {
+                if (get_mods() & MOD_MASK_ALT) {
                     clear_keyboard();
                     keymap_config.nkro = false;
                     tap_code(KC_LCTL);
