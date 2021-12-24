@@ -75,7 +75,7 @@ static bool is_transparent(uint16_t keycode) { return keycode == KC_TRNS; }
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
     switch (current_layer) {
-        case MAC_BASE:
+        case LINUX_BASE:
         case WIN_BASE:
             if (current_game && current_game <= MAX_GAME_VALUE && game_rgb_mappings[current_game]) {
                 rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, game_rgb_mappings[current_game], RGB_OFF);
@@ -88,7 +88,7 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             }
 #endif
             break;
-        case MAC_FN:
+        case LINUX_FN:
         case WIN_FN:
 #ifdef FN_LAYER_TRANSPARENT_KEYS_OFF
             rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, is_transparent, RGB_OFF);

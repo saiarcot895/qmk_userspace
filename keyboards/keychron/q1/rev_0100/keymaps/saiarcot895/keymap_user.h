@@ -19,8 +19,8 @@
 // clang-format off
 
 enum layers {
-    MAC_BASE,
-    MAC_FN,
+    LINUX_BASE,
+    LINUX_FN,
     WIN_BASE,
     WIN_FN
 };
