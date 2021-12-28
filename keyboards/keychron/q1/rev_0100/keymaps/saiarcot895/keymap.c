@@ -28,15 +28,20 @@ typedef union {
 
 static user_config_t user_config;
 uint8_t current_game = GAME_NONE;
-static int quantum_scans = 0;
+static uint16_t quantum_scans = 0;
 
 #ifdef VIA_ENABLE
 enum keyboard_command_id {
-  kb_disable_backlight = 0x80,
-  kb_enable_backlight,
-  kb_set_active_rgb,
-  kb_set_screensaver_rgb,
-  kb_game
+  kb_enable_backlight = 0x80,
+  kb_rgb_mode,
+  kb_rgb_speed,
+  kb_game,
+};
+
+enum rgb_modes {
+    computer_active = 0x0,
+    computer_locked,
+    computer_screensaver,
 };
 #endif
 
@@ -164,11 +169,33 @@ void raw_hid_receive_kb(uint8_t *data, uint8_t length)
         case id_get_keyboard_value:
             {
                 switch(command_data[0]) {
+#ifdef RGB_MATRIX_ENABLE
+                    case kb_enable_backlight:
+                        {
+                            command_data[1] = rgb_matrix_is_enabled();
+                            break;
+                        }
+                    case kb_rgb_mode:
+                        {
+                            uint8_t mode = rgb_matrix_get_mode();
+                            if (mode == RGB_MATRIX_RAINBOW_MOVING_CHEVRON) {
+                                command_data[1] = computer_active;
+                            } else if (mode == RGB_MATRIX_CUSTOM_CUSTOM_DIGITAL_RAIN) {
+                                command_data[1] = computer_locked;
+                            }
+                            break;
+                        }
+                    case kb_rgb_speed:
+                        {
+                            command_data[1] = rgb_matrix_get_speed();
+                            break;
+                        }
                     case kb_game:
                         {
                             command_data[1] = current_game;
                             break;
                         }
+#endif
 #if 0
                     case id_encoder_custom:
                         {
@@ -197,25 +224,31 @@ void raw_hid_receive_kb(uint8_t *data, uint8_t length)
             {
                 switch(command_data[0]) {
 #ifdef RGB_MATRIX_ENABLE
-                    case kb_disable_backlight:
-                        {
-                            rgb_matrix_disable_noeeprom();
-                            break;
-                        }
                     case kb_enable_backlight:
                         {
-                            rgb_matrix_enable_noeeprom();
+                            bool enabled = command_data[1];
+                            if (enabled) {
+                                rgb_matrix_enable_noeeprom();
+                            } else {
+                                rgb_matrix_disable_noeeprom();
+                            }
                             break;
                         }
-                    case kb_set_active_rgb:
+                    case kb_rgb_mode:
                         {
-                            rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+                            enum rgb_modes rgb_mode = command_data[1];
+                            if (rgb_mode == computer_active) {
+                                rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+                                rgb_matrix_set_speed_noeeprom(128);
+                            } else if (rgb_mode == computer_locked || rgb_mode == computer_screensaver) {
+                                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_CUSTOM_DIGITAL_RAIN);
+                            }
                             break;
                         }
-                    case kb_set_screensaver_rgb:
+                    case kb_rgb_speed:
                         {
-                            rgb_matrix_mode_noeeprom(RGB_MATRIX_DIGITAL_RAIN);
-                            break;
+                            uint8_t new_speed = command_data[1];
+                            rgb_matrix_set_speed_noeeprom(new_speed);
                         }
                     case kb_game:
                         {

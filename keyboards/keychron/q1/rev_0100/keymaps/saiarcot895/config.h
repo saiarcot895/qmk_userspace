@@ -17,6 +17,8 @@
 #pragma once
 
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+#define RGB_MATRIX_CUSTOM_USER
+#define ENABLE_RGB_MATRIX_CUSTOM_DIGITAL_RAIN
 
 /* RGB Matrix Configuration */
 #ifdef RGB_MATRIX_ENABLE
