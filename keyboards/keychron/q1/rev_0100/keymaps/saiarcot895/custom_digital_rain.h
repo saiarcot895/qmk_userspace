@@ -54,7 +54,11 @@ bool CUSTOM_DIGITAL_RAIN(effect_params_t* params) {
                     rgb_matrix_set_color(led[0], boost, max_intensity, boost);
                 } else {
                     const uint8_t green = (uint8_t)((uint16_t)max_intensity * g_rgb_frame_buffer[row][col] / pure_green_intensity);
-                    rgb_matrix_set_color(led[0], 0, green, 0);
+                    if (host_keyboard_led_state().caps_lock) {
+                        rgb_matrix_set_color(led[0], green, 0, 0);
+                    } else {
+                        rgb_matrix_set_color(led[0], 0, green, 0);
+                    }
                 }
             }
         }
