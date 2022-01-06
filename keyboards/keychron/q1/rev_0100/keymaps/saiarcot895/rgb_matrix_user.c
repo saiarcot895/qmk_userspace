@@ -41,6 +41,28 @@ static bool is_not_drg_key(uint16_t keycode) {
         case KC_TAB:
         case KC_LSFT:
         case KC_LCTL:
+        case KC_ESC:
+            return false;
+        default:
+            return true;
+    }
+}
+
+static bool is_not_dont_starve_key(uint16_t keycode) {
+    switch (keycode) {
+        case KC_W:
+        case KC_A:
+        case KC_S:
+        case KC_D:
+        case KC_Q:
+        case KC_E:
+        case KC_F:
+        case KC_M:
+        case KC_TAB:
+        case KC_LSFT:
+        case KC_LCTL:
+        case KC_ESC:
+        case KC_SPC:
             return false;
         default:
             return true;
@@ -48,7 +70,8 @@ static bool is_not_drg_key(uint16_t keycode) {
 }
 
 bool (*const game_rgb_mappings[MAX_GAME_VALUE])(uint16_t) = {
-    [GAME_DRG] = is_not_drg_key
+    [GAME_DRG] = is_not_drg_key,
+    [GAME_DONT_STARVE] = is_not_dont_starve_key
 };
 
 void rgb_matrix_init_user(void) {

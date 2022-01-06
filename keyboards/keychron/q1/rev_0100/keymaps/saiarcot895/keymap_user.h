@@ -28,6 +28,7 @@ enum layers {
 enum games {
     GAME_NONE = 0x00,
     GAME_DRG,
+    GAME_DONT_STARVE,
     MAX_GAME_VALUE
 };
 extern uint8_t current_game;
