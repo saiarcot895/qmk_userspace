@@ -125,12 +125,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     tap_code(keycode - KC_F13 + KC_1);
                     clear_keyboard();
                     keymap_config.nkro = true;
+#if 0
                     if (keycode == KC_F13) {
                         user_config.layer = LINUX_BASE;
                     } else {
                         user_config.layer = WIN_BASE;
                     }
                     layer_move(user_config.layer);
+#endif
                     eeconfig_update_user(user_config.raw);
                 }
             }
