@@ -47,6 +47,7 @@ enum rgb_modes {
 
 enum custom_keycodes {
     RST_DE = SAFE_RANGE,
+    WORDLE,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -62,8 +63,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LINUX_FN] = LAYOUT_ansi_82( 
      _______,            KC_BRID,  KC_BRIU,  KC_F23,   KC_F24,   _______,  _______,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,   RST_DE,
      _______,  KC_F13,   KC_F14,   KC_F15,   KC_F16,   KC_F17,   KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,   _______,  _______,  KC_DEL,            _______,
-     RGB_TOG,  RGB_MOD,  RGB_VAI,  RGB_HUI,  RGB_SAI,  RGB_SPI,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
-     _______,  RGB_RMOD, RGB_VAD,  RGB_HUD,  RGB_SAD,  RGB_SPD,  _______,  _______,  _______,  _______,  _______,  _______,            _______,            _______,
+     _______,  _______,  WORDLE,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
+     _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,            _______,
      _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______, 
      _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______),
 
@@ -150,6 +151,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING(SS_LALT(SS_TAP(X_SPACE)));
                 SEND_STRING(SS_DELAY(500));
                 SEND_STRING("plasmashell" SS_DELAY(500) SS_TAP(X_ENTER));
+            }
+            return false;  // Skip all further processing of this key
+        case WORDLE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_TAP(X_LGUI));
+                SEND_STRING(SS_DELAY(750));
+                SEND_STRING("Chromium" SS_DELAY(300) SS_TAP(X_ENTER));
+                SEND_STRING(SS_DELAY(1500));
+                SEND_STRING("https://www.nytimes.com/games/wordle/index.html" SS_TAP(X_ENTER));
+                SEND_STRING(SS_LCTL(SS_TAP(X_T)));
+                SEND_STRING(SS_DELAY(1000));
+                SEND_STRING("https://www.quordle.com/" SS_TAP(X_ENTER));
+                SEND_STRING(SS_LCTL(SS_TAP(X_T)));
+                SEND_STRING(SS_DELAY(1000));
+                SEND_STRING("https://wafflegame.net/" SS_TAP(X_ENTER));
+                SEND_STRING(SS_LCTL(SS_TAP(X_T)));
+                SEND_STRING(SS_DELAY(1000));
+                SEND_STRING("https://discord.com/channels/721037447382696050/937596273199030323" SS_TAP(X_ENTER));
+                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
+                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
+                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
+                SEND_STRING("homie" SS_TAP(X_ENTER));
+                SEND_STRING(SS_DELAY(100));
+                SEND_STRING(SS_LCTL(SS_TAP(X_TAB)) SS_DELAY(150));
+                SEND_STRING("homie" SS_TAP(X_ENTER));
+                SEND_STRING(SS_DELAY(200));
+                SEND_STRING("tunas" SS_TAP(X_ENTER));
+                SEND_STRING(SS_DELAY(200));
+                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
+                SEND_STRING(SS_DELAY(500));
+                SEND_STRING("tunas" SS_TAP(X_ENTER));
             }
             return false;  // Skip all further processing of this key
         default:
