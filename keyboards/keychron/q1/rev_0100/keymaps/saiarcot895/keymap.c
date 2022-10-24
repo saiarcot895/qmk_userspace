@@ -17,6 +17,8 @@
 #include QMK_KEYBOARD_H
 #include "keymap_user.h"
 #include "rgb_matrix_user.h"
+#include "raw_hid.h"
+#include "via.h"
 
 typedef union {
     uint32_t raw;
@@ -30,7 +32,6 @@ static user_config_t user_config;
 uint8_t current_game = GAME_NONE;
 static uint16_t quantum_scans = 0;
 
-#ifdef VIA_ENABLE
 enum keyboard_command_id {
   kb_enable_backlight = 0x80,
   kb_rgb_mode,
@@ -43,7 +44,6 @@ enum rgb_modes {
     computer_locked,
     computer_screensaver,
 };
-#endif
 
 enum custom_keycodes {
     RST_DE = SAFE_RANGE,
@@ -208,9 +208,12 @@ void matrix_scan_user(void) {
     }
 }
 
+#ifdef RAW_ENABLE
 #ifdef VIA_ENABLE
-
 void raw_hid_receive_kb(uint8_t *data, uint8_t length)
+#else
+void raw_hid_receive(uint8_t *data, uint8_t length)
+#endif
 {
     uint8_t *command_id = &(data[0]);
     uint8_t *command_data = &(data[1]);
@@ -334,5 +337,8 @@ void raw_hid_receive_kb(uint8_t *data, uint8_t length)
             }
     }
     // DO NOT call raw_hid_send(data,length) here, let caller do this
+#ifndef VIA_ENABLE
+    raw_hid_send(data, length);
+#endif
 }
 #endif
