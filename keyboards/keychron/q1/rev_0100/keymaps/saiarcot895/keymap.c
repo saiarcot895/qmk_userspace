@@ -31,6 +31,7 @@ typedef union {
 static user_config_t user_config;
 uint8_t current_game = GAME_NONE;
 static uint16_t quantum_scans = 0;
+static uint8_t emote_repeat_count = 0;
 
 enum keyboard_command_id {
   kb_enable_backlight = 0x80,
@@ -48,22 +49,47 @@ enum rgb_modes {
 enum custom_keycodes {
     RST_DE = SAFE_RANGE,
     WORDLE,
+    ALANA_CLAP,
+    ALANA_MUSHROOM,
+    ALANA_AVO_GROOVE,
+    ALANA_HI,
+    ALANA_GOODVIBES,
+    PCROW_BOUNCE,
+    PCROW_BED,
+    LIVHAR_CLAP,
+    LIVHAR_DANCE,
+    LIVHAR_LIGHT,
+    BTTV_LETSGO,
+    BTTV_PEEPOCLAP,
+    BTTV_PUG,
+    BTTV_CAT,
+    BTTV_SWAY,
+};
+
+enum {
+    TD_EMOTES,
+};
+
+static void emotes_finished(qk_tap_dance_state_t *state, void *user_data);
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_EMOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, emotes_finished, NULL),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [LINUX_BASE] = LAYOUT_ansi_82( 
-     KC_ESC,             KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_PSCR,  KC_HOME,
-     KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC,            KC_PGUP,
-     KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,            KC_PGDN,
-     KC_CAPS,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,             KC_END,
-     KC_LSFT,            KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,            KC_RSFT,  KC_UP,
-     KC_LCTL,  KC_LGUI,  KC_LALT,                                KC_SPC,                                 KC_RALT, MO(LINUX_FN),KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT),
+     KC_ESC,             KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,     KC_F10,       KC_F11,  KC_F12,   KC_PSCR,  KC_HOME,
+     KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,      KC_MINS,      KC_EQL,  KC_BSPC,            KC_PGUP,
+     KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,      KC_LBRC,      KC_RBRC, KC_BSLS,            KC_PGDN,
+     KC_CAPS,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,   KC_QUOT,               KC_ENT,             KC_END,
+     KC_LSFT,            KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,    KC_SLSH,               KC_RSFT,  KC_UP,
+     KC_LCTL,  KC_LGUI,  KC_LALT,                                KC_SPC,                                 TD(TD_EMOTES), MO(LINUX_FN), KC_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
 [LINUX_FN] = LAYOUT_ansi_82( 
      _______,            KC_BRID,  KC_BRIU,  KC_F23,   KC_F24,   _______,  _______,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,   RST_DE,
      _______,  KC_F13,   KC_F14,   KC_F15,   KC_F16,   KC_F17,   KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,   _______,  _______,  KC_DEL,            _______,
-     _______,  _______,  WORDLE,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
+     _______,  _______,  WORDLE,   _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
      _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,            _______,
      _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______, 
      _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______),
@@ -82,7 +108,47 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      RGB_TOG,  RGB_MOD,  RGB_VAI,  RGB_HUI,  RGB_SAI,  RGB_SPI,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
      _______,  RGB_RMOD, RGB_VAD,  RGB_HUD,  RGB_SAD,  RGB_SPD,  _______,  _______,  _______,  _______,  _______,  _______,            _______,            _______,
      _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______, 
-     _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______)
+     _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______),
+
+[EMOTE_SOURCE] = LAYOUT_ansi_82( 
+     TO(LINUX_BASE),       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  TO(EMOTES_PCROW),  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
+     XXXXXXX,  TO(EMOTES_ALANA),  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  TO(EMOTES_LIVHAR),  XXXXXXX,  XXXXXXX,            XXXXXXX,            XXXXXXX,
+     XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  TO(EMOTES_BTTV),  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX, 
+     XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX),
+
+[EMOTES_BTTV] = LAYOUT_ansi_82( 
+     TO(LINUX_BASE),       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+     XXXXXXX,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,    XXXXXXX,  XXXXXXX,   XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  BTTV_PUG,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  BTTV_SWAY,XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  BTTV_CAT,  XXXXXXX,  BTTV_LETSGO,  XXXXXXX,  XXXXXXX,            XXXXXXX,            XXXXXXX,
+     XXXXXXX,            XXXXXXX,  XXXXXXX,  BTTV_PEEPOCLAP,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX, 
+     XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX),
+
+[EMOTES_ALANA] = LAYOUT_ansi_82( 
+     TO(LINUX_BASE),       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+     XXXXXXX,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,    XXXXXXX,  XXXXXXX,   XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  ALANA_AVO_GROOVE,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,            XXXXXXX,
+     XXXXXXX,            XXXXXXX,  XXXXXXX,  ALANA_CLAP,  ALANA_GOODVIBES,  XXXXXXX,  XXXXXXX,  ALANA_MUSHROOM,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX, 
+     XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX),
+
+[EMOTES_PCROW] = LAYOUT_ansi_82( 
+     TO(LINUX_BASE),       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+     XXXXXXX,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,    XXXXXXX,  XXXXXXX,   XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  PCROW_BED,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,            XXXXXXX,
+     XXXXXXX,            XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  PCROW_BOUNCE,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX, 
+     XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX),
+
+[EMOTES_LIVHAR] = LAYOUT_ansi_82( 
+     TO(LINUX_BASE),       XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,
+     XXXXXXX,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,    XXXXXXX,  XXXXXXX,   XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
+     XXXXXXX,  XXXXXXX,  XXXXXXX,  LIVHAR_DANCE,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  LIVHAR_LIGHT,  XXXXXXX,  XXXXXXX,            XXXXXXX,            XXXXXXX,
+     XXXXXXX,            XXXXXXX,  XXXXXXX,  LIVHAR_CLAP,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX, 
+     XXXXXXX,  XXXXXXX,  XXXXXXX,                                XXXXXXX,                                XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX),
 
 };
 
@@ -117,7 +183,102 @@ void matrix_init_user(void) {
 #endif
 }
 
+static void emotes_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 2) {
+        layer_move(EMOTE_SOURCE);
+        emote_repeat_count = 1;
+    }
+}
+
+static void send_emote(uint16_t keycode) {
+    const char *emote = NULL;
+    bool isBttv = false;
+    switch (keycode) {
+        case ALANA_CLAP:
+            emote = PSTR("alanab3Clap ");
+            break;
+        case ALANA_MUSHROOM:
+            emote = PSTR("alanab3Mushroom ");
+            break;
+        case ALANA_AVO_GROOVE:
+            emote = PSTR("alanab3AvoGroove ");
+            break;
+        case ALANA_HI:
+            emote = PSTR("alanab3MushHi ");
+            break;
+        case ALANA_GOODVIBES:
+            emote = PSTR("alanab3GOODvIBES ");
+            break;
+        case BTTV_PEEPOCLAP:
+            emote = PSTR("PeepoClap ");
+            isBttv = true;
+            break;
+        case BTTV_LETSGO:
+            emote = PSTR("LETSGO ");
+            isBttv = true;
+            break;
+        case BTTV_PUG:
+            emote = PSTR("pugPls ");
+            isBttv = true;
+            break;
+        case BTTV_CAT:
+            emote = PSTR("catJAM ");
+            isBttv = true;
+            break;
+        case BTTV_SWAY:
+            emote = PSTR("haseSlow ");
+            isBttv = true;
+            break;
+        case PCROW_BOUNCE:
+            emote = PSTR("pcrowBounce ");
+            break;
+        case PCROW_BED:
+            emote = PSTR("pcrowBed ");
+            break;
+        case LIVHAR_CLAP:
+            emote = PSTR("livharClapping ");
+            break;
+        case LIVHAR_DANCE:
+            emote = PSTR("livharDanceparty ");
+            break;
+        case LIVHAR_LIGHT:
+            emote = PSTR("livharLightSway ");
+            break;
+        default:
+            layer_move(LINUX_BASE);
+            return;
+    }
+
+    send_string_P(emote);
+    layer_move(LINUX_BASE);
+
+    if (emote_repeat_count > 1) {
+        if (isBttv) {
+            int emoteLen = strlen_P(emote);
+            register_mods(MOD_BIT(KC_LSFT));
+            for (int i = 0; i < emoteLen; i++) {
+                tap_code(KC_LEFT);
+            }
+        } else {
+            register_mods(MOD_BIT(KC_LSFT));
+            tap_code(KC_LEFT);
+            tap_code(KC_LEFT);
+        }
+        unregister_mods(MOD_BIT(KC_LSFT));
+        register_mods(MOD_BIT(KC_LCTL));
+        tap_code(KC_C);
+        unregister_mods(MOD_BIT(KC_LCTL));
+        tap_code(KC_RIGHT);
+        register_mods(MOD_BIT(KC_LCTL));
+        for (int i = 1; i < emote_repeat_count; i++) {
+            tap_code(KC_V);
+        }
+        clear_keyboard();
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    uint8_t current_layer = 0;
     switch (keycode) {
         case KC_F13:
         case KC_F14:
@@ -184,6 +345,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("tunas" SS_TAP(X_ENTER));
             }
             return false;  // Skip all further processing of this key
+        case KC_1:
+        case KC_2:
+        case KC_3:
+        case KC_4:
+        case KC_5:
+        case KC_6:
+        case KC_7:
+        case KC_8:
+        case KC_9:
+            current_layer = get_highest_layer(layer_state);
+            if (current_layer <= EMOTE_SOURCE) {
+                return true;
+            }
+            if (!record->event.pressed) {
+                emote_repeat_count = emote_repeat_count * 10 + keycode - KC_0;
+            }
+            return false;
+        case ALANA_CLAP:
+        case ALANA_MUSHROOM:
+        case ALANA_AVO_GROOVE:
+        case ALANA_HI:
+        case ALANA_GOODVIBES:
+        case BTTV_LETSGO:
+        case BTTV_PEEPOCLAP:
+        case BTTV_PUG:
+        case BTTV_CAT:
+        case BTTV_SWAY:
+        case PCROW_BOUNCE:
+        case PCROW_BED:
+        case LIVHAR_CLAP:
+        case LIVHAR_DANCE:
+        case LIVHAR_LIGHT:
+            if (!record->event.pressed) {
+                send_emote(keycode);
+            }
+            return false;
         default:
             return true;  // Process all other keycodes normally
     }

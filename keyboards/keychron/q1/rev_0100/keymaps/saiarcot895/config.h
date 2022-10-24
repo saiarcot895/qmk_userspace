@@ -20,6 +20,8 @@
 #undef ENABLE_RGB_MATRIX_TYPING_HEATMAP
 #endif
 
+#define TAPPING_TERM 200
+
 /* RGB Matrix Configuration */
 #ifdef RGB_MATRIX_ENABLE
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS

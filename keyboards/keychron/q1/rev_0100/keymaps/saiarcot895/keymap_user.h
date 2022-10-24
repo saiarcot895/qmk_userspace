@@ -22,7 +22,12 @@ enum layers {
     LINUX_BASE,
     LINUX_FN,
     WIN_BASE,
-    WIN_FN
+    WIN_FN,
+    EMOTE_SOURCE,
+    EMOTES_BTTV,
+    EMOTES_ALANA,
+    EMOTES_PCROW,
+    EMOTES_LIVHAR,
 };
 
 enum games {

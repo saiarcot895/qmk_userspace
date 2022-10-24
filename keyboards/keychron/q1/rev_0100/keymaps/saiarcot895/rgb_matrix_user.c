@@ -93,7 +93,7 @@ static bool is_caps_lock_indicator(uint16_t keycode) {
 #endif
 }
 
-static bool is_transparent(uint16_t keycode) { return keycode == KC_TRNS; }
+static bool is_transparent(uint16_t keycode) { return keycode == KC_TRNS || keycode == KC_NO; }
 
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
@@ -113,6 +113,11 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             break;
         case LINUX_FN:
         case WIN_FN:
+#ifdef FN_LAYER_TRANSPARENT_KEYS_OFF
+            rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, is_transparent, RGB_OFF);
+#endif
+            break;
+        default:
 #ifdef FN_LAYER_TRANSPARENT_KEYS_OFF
             rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, is_transparent, RGB_OFF);
 #endif
