@@ -1,4 +1,5 @@
 /* Copyright 2021 @ Grayson Carr
+ * Copyright 2022 @ Saikrishna Arcot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +16,14 @@
  */
 
 #pragma once
+
+enum games {
+    GAME_NONE = 0x00,
+    GAME_DRG,
+    GAME_DONT_STARVE,
+    MAX_GAME_VALUE
+};
+extern uint8_t current_game;
 
 void rgb_matrix_init_user(void);
 

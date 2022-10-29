@@ -1,4 +1,4 @@
-/* Copyright 2021 @ Grayson Carr
+/* Copyright 2022 @ Saikrishna Arcot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,12 +30,38 @@ enum layers {
     EMOTES_LIVHAR,
 };
 
-enum games {
-    GAME_NONE = 0x00,
-    GAME_DRG,
-    GAME_DONT_STARVE,
-    MAX_GAME_VALUE
+enum custom_keycodes {
+    RST_DE = SAFE_RANGE,
+    WORDLE,
+    ALANA_CLAP,
+    ALANA_MUSHROOM,
+    ALANA_AVO_GROOVE,
+    ALANA_HI,
+    ALANA_GOODVIBES,
+    PCROW_BOUNCE,
+    PCROW_BED,
+    LIVHAR_CLAP,
+    LIVHAR_DANCE,
+    LIVHAR_LIGHT,
+    BTTV_LETSGO,
+    BTTV_PEEPOCLAP,
+    BTTV_PUG,
+    BTTV_CAT,
+    BTTV_SWAY,
 };
-extern uint8_t current_game;
+
+enum {
+    TD_EMOTES,
+};
+
+typedef union {
+    uint32_t raw;
+    struct {
+        uint8_t brightness:8;
+        uint8_t layer:4;
+    };
+} user_config_t;
+
+extern user_config_t user_config;
 
 // clang-format on

@@ -1,4 +1,5 @@
 /* Copyright 2021 @ Grayson Carr
+ * Copyright 2022 @ Saikrishna Arcot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +16,9 @@
  */
 
 #include QMK_KEYBOARD_H
+#include <rgb_matrix.h>
 #include "rgb_matrix_user.h"
-#include "keymap_user.h"
+#include "user_keymap.h"
 
 static keypos_t led_index_key_position[DRIVER_LED_TOTAL];
 

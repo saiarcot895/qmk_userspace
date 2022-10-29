@@ -1,4 +1,4 @@
-/* Copyright 2021 @ Grayson Carr
+/* Copyright 2022 @ Saikrishna Arcot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
 
 #pragma once
 
+#define TAPPING_TERM 200
+
 #ifdef ENABLE_RGB_MATRIX_TYPING_HEATMAP
 #undef ENABLE_RGB_MATRIX_TYPING_HEATMAP
 #endif
-
-#define TAPPING_TERM 200
 
 /* RGB Matrix Configuration */
 #ifdef RGB_MATRIX_ENABLE
