@@ -1,6 +1,7 @@
 #include <rgb_matrix.h>
 #include <raw_hid.h>
 #include <via.h>
+#include "action_layer.h"
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"
 
@@ -46,6 +47,8 @@ static void emotes_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 2) {
         layer_move(EMOTE_SOURCE);
         emote_repeat_count = 1;
+    } else if (state->count == 3) {
+        layer_move(MOUSE);
     }
 }
 

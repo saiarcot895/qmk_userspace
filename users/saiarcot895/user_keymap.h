@@ -23,6 +23,7 @@ enum layers {
     LINUX_FN,
     WIN_BASE,
     WIN_FN,
+    MOUSE,
     EMOTE_SOURCE,
     EMOTES_BTTV,
     EMOTES_ALANA,

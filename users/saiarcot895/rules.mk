@@ -2,6 +2,7 @@ RAW_ENABLE = yes
 BOOTMAGIC_ENABLE := yes
 LTO_ENABLE = yes
 TAP_DANCE_ENABLE = yes
+MOUSEKEY_ENABLE = yes
 
 SRC += user_keymap.c
 
