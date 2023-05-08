@@ -22,9 +22,9 @@ enum rgb_modes {
     computer_screensaver,
 };
 
-static void emotes_finished(qk_tap_dance_state_t *state, void *user_data);
+static void emotes_finished(tap_dance_state_t *state, void *user_data);
 
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
     [TD_EMOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, emotes_finished, NULL),
 };
 
@@ -43,7 +43,7 @@ void eeconfig_init_user(void) {
     layer_move(user_config.layer);
 }
 
-static void emotes_finished(qk_tap_dance_state_t *state, void *user_data) {
+static void emotes_finished(tap_dance_state_t *state, void *user_data) {
     if (state->count == 2) {
         layer_move(EMOTE_SOURCE);
         emote_repeat_count = 1;

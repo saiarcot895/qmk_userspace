@@ -20,7 +20,7 @@
 #include "rgb_matrix_user.h"
 #include "user_keymap.h"
 
-static keypos_t led_index_key_position[DRIVER_LED_TOTAL];
+static keypos_t led_index_key_position[RGB_MATRIX_LED_COUNT];
 
 static bool is_not_drg_key(uint16_t keycode) {
     switch (keycode) {
@@ -97,7 +97,7 @@ static bool is_caps_lock_indicator(uint16_t keycode) {
 
 static bool is_transparent(uint16_t keycode) { return keycode == KC_TRNS || keycode == KC_NO; }
 
-void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
     switch (current_layer) {
         case LINUX_BASE:
@@ -125,6 +125,7 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 #endif
             break;
     }
+    return false;
 }
 
 void rgb_matrix_set_color_by_keycode(uint8_t led_min, uint8_t led_max, uint8_t layer, bool (*is_keycode)(uint16_t), uint8_t red, uint8_t green, uint8_t blue) {

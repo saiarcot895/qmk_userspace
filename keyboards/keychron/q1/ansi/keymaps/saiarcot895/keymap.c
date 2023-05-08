@@ -18,7 +18,6 @@
 #include QMK_KEYBOARD_H
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"
-#include "via.h"
 
 static uint16_t quantum_scans = 0;
 
