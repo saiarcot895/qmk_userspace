@@ -7,7 +7,7 @@
 
 user_config_t user_config;
 uint8_t current_game = GAME_NONE;
-static uint8_t emote_repeat_count = 0;
+uint8_t emote_repeat_count = 0;
 
 enum keyboard_command_id {
   kb_enable_backlight = 0x80,
@@ -132,7 +132,7 @@ static void send_emote(uint16_t keycode) {
         unregister_mods(MOD_BIT(KC_LCTL));
         tap_code(KC_RIGHT);
         register_mods(MOD_BIT(KC_LCTL));
-        for (int i = 1; i < emote_repeat_count; i++) {
+        for (uint8_t i = 1; i < emote_repeat_count; i++) {
             tap_code(KC_V);
         }
         clear_keyboard();
@@ -142,27 +142,17 @@ static void send_emote(uint16_t keycode) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     uint8_t current_layer = 0;
     switch (keycode) {
-        case KC_F13:
-        case KC_F14:
+        case DISPLAY_1:
+        case DISPLAY_2:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_ALT) {
-                    clear_keyboard();
-                    keymap_config.nkro = false;
-                    tap_code(KC_LCTL);
-                    tap_code(KC_LCTL);
-                    tap_code(keycode - KC_F13 + KC_1);
-                    clear_keyboard();
-                    keymap_config.nkro = true;
-#if 0
-                    if (keycode == KC_F13) {
-                        user_config.layer = LINUX_BASE;
-                    } else {
-                        user_config.layer = WIN_BASE;
-                    }
-                    layer_move(user_config.layer);
-#endif
-                    eeconfig_update_user(user_config.raw);
-                }
+                clear_keyboard();
+                keymap_config.nkro = false;
+                tap_code(KC_LCTL);
+                tap_code(KC_LCTL);
+                tap_code(keycode - DISPLAY_1 + KC_1);
+                clear_keyboard();
+                keymap_config.nkro = true;
+                eeconfig_update_user(user_config.raw);
             }
             return false;  // Skip all further processing of this key
         case RST_DE:
@@ -216,6 +206,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_7:
         case KC_8:
         case KC_9:
+        case KC_0:
             current_layer = get_highest_layer(layer_state);
             if (current_layer <= EMOTE_SOURCE) {
                 return true;

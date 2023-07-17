@@ -34,6 +34,8 @@ enum layers {
 enum custom_keycodes {
     RST_DE = SAFE_RANGE,
     WORDLE,
+    DISPLAY_1,
+    DISPLAY_2,
     ALANA_CLAP,
     ALANA_MUSHROOM,
     ALANA_AVO_GROOVE,
