@@ -22,6 +22,7 @@ enum layers {
     LINUX_BASE,
     LINUX_FN,
     MOUSE,
+    FORTNITE,
     EMOTE_SOURCE,
     EMOTES_BTTV,
     EMOTES_ALANA,

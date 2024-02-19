@@ -19,9 +19,12 @@
 
 
 #include "keycode.h"
+#include "moonlander.h"
 #include QMK_KEYBOARD_H
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"
+
+static bool prev_transport_connected = true;
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -96,6 +99,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(LINUX_BASE),    TO(LINUX_BASE), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                             XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
     ),
+
+    [FORTNITE] = LAYOUT_moonlander(
+        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_M,          XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_DEL,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_I,          XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_BSPC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_ESC,          XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_LSFT, KC_M,    KC_I,    KC_C,    KC_V,    KC_B,                                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_LCTL, KC_NO,XXXXXXX,KC_LEFT, KC_RGHT,  KC_LALT,                      XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                            KC_LCTL,  KC_SPC, KC_LGUI,          XXXXXXX,  XXXXXXX, XXXXXXX
+    ),
 };
 // clang-format on
 
@@ -148,4 +160,15 @@ void matrix_init_user(void) {
 #ifdef RGB_MATRIX_ENABLE
     rgb_matrix_init_user();
 #endif
+}
+
+void housekeeping_task_user(void) {
+    if (is_transport_connected() != prev_transport_connected) {
+        if (is_transport_connected()) {
+            layer_move(LINUX_BASE);
+        } else {
+            layer_move(FORTNITE);
+        }
+        prev_transport_connected = is_transport_connected();
+    }
 }
