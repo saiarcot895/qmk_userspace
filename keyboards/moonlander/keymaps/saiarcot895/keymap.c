@@ -29,7 +29,11 @@ static bool prev_transport_connected = true;
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LINUX_BASE] = LAYOUT_moonlander(
-        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    TO(EMOTE_SOURCE), KC_RGHT,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+#ifdef TWITCH_EMOTES
+        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    TO(EMOTE_SOURCE), XXXXXXX,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+#else
+        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    XXXXXXX,          XXXXXXX,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+#endif
         KC_DEL,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    TG(LINUX_FN), TG(LINUX_FN), KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
         KC_BSPC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_HYPR,           KC_MEH,  KC_H,    KC_J,    KC_K,    KC_L,    LT(MOUSE, KC_SCLN), KC_QUOT,
         KC_LSFT, LCTL_T(KC_Z),KC_X,KC_C,    KC_V,    KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  RCTL_T(KC_SLSH), KC_RSFT,
@@ -55,6 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
     ),
 
+#ifdef TWITCH_EMOTES
     [EMOTE_SOURCE] = LAYOUT_moonlander(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TO(EMOTES_PCROW), XXXXXXX,
@@ -99,6 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(LINUX_BASE),    TO(LINUX_BASE), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                             XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
     ),
+#endif
 
     [FORTNITE] = LAYOUT_moonlander(
         KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_M,          XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -135,6 +141,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 
+#ifdef TWITCH_EMOTES
 extern uint8_t emote_repeat_count;
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -143,6 +150,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     }
     return state;
 }
+#endif
 
 void keyboard_post_init_user(void) {
     // Call the keymap level matrix init.

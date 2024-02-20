@@ -23,11 +23,13 @@ enum layers {
     LINUX_FN,
     MOUSE,
     FORTNITE,
+#ifdef TWITCH_EMOTES
     EMOTE_SOURCE,
     EMOTES_BTTV,
     EMOTES_ALANA,
     EMOTES_PCROW,
     EMOTES_LIVHAR,
+#endif
 };
 
 enum custom_keycodes {
@@ -35,6 +37,7 @@ enum custom_keycodes {
     WORDLE,
     DISPLAY_1,
     DISPLAY_2,
+#ifdef TWITCH_EMOTES
     ALANA_CLAP,
     ALANA_MUSHROOM,
     ALANA_AVO_GROOVE,
@@ -50,6 +53,7 @@ enum custom_keycodes {
     BTTV_PUG,
     BTTV_CAT,
     BTTV_SWAY,
+#endif
 };
 
 enum {

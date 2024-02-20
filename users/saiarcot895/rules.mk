@@ -1,8 +1,13 @@
 RAW_ENABLE = yes
 BOOTMAGIC_ENABLE := yes
 LTO_ENABLE = yes
-TAP_DANCE_ENABLE = yes
 MOUSEKEY_ENABLE = yes
+TWITCH_EMOTES_ENABLE = no
+
+ifeq ($(strip $(TWITCH_EMOTES_ENABLE)), yes)
+    TAP_DANCE_ENABLE = yes
+    OPT_DEFS += -DTWITCH_EMOTES
+endif
 
 SRC += user_keymap.c
 

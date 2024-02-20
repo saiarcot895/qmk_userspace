@@ -7,7 +7,9 @@
 
 user_config_t user_config;
 uint8_t current_game = GAME_NONE;
+#ifdef TWITCH_EMOTES
 uint8_t emote_repeat_count = 0;
+#endif
 
 enum keyboard_command_id {
   kb_enable_backlight = 0x80,
@@ -22,11 +24,13 @@ enum rgb_modes {
     computer_screensaver,
 };
 
+#ifdef TWITCH_EMOTES
 static void emotes_finished(tap_dance_state_t *state, void *user_data);
 
 tap_dance_action_t tap_dance_actions[] = {
     [TD_EMOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, emotes_finished, NULL),
 };
+#endif
 
 void eeconfig_init_user(void) {
     user_config.raw = 0;
@@ -43,6 +47,7 @@ void eeconfig_init_user(void) {
     layer_move(user_config.layer);
 }
 
+#ifdef TWITCH_EMOTES
 static void emotes_finished(tap_dance_state_t *state, void *user_data) {
     if (state->count == 2) {
         layer_move(EMOTE_SOURCE);
@@ -138,9 +143,12 @@ static void send_emote(uint16_t keycode) {
         clear_keyboard();
     }
 }
+#endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef TWITCH_EMOTES
     uint8_t current_layer = 0;
+#endif
     switch (keycode) {
         case DISPLAY_1:
         case DISPLAY_2:
@@ -197,6 +205,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("tunas" SS_TAP(X_ENTER));
             }
             return false;  // Skip all further processing of this key
+#ifdef TWITCH_EMOTES
         case KC_1:
         case KC_2:
         case KC_3:
@@ -234,6 +243,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 send_emote(keycode);
             }
             return false;
+#endif
         default:
             return true;  // Process all other keycodes normally
     }
