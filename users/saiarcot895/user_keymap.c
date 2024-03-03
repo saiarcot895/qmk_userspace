@@ -36,7 +36,7 @@ void eeconfig_init_user(void) {
     user_config.raw = 0;
 
     user_config.brightness = 128;
-    user_config.layer = LINUX_BASE;
+    user_config.layer = BASE;
     eeconfig_update_user(user_config.raw);
 
 #ifdef RGB_MATRIX_ENABLE

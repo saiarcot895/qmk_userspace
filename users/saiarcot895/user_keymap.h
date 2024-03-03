@@ -19,8 +19,9 @@
 // clang-format off
 
 enum layers {
-    LINUX_BASE,
-    LINUX_FN,
+    BASE,
+    MODTAP,
+    FUNCTION,
     MOUSE,
     FORTNITE,
 #ifdef TWITCH_EMOTES
