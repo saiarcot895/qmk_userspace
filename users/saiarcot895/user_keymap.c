@@ -12,7 +12,7 @@ uint8_t emote_repeat_count = 0;
 #endif
 
 enum keyboard_command_id {
-  kb_enable_backlight = 0x80,
+  kb_enable_backlight,
   kb_rgb_mode,
   kb_rgb_speed,
   kb_game,
@@ -251,7 +251,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef RAW_ENABLE
 #ifdef VIA_ENABLE
-void raw_hid_receive_kb(uint8_t *data, uint8_t length)
+void via_custom_value_command_kb(uint8_t *data, uint8_t length)
 #else
 void raw_hid_receive(uint8_t *data, uint8_t length)
 #endif
@@ -259,7 +259,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length)
     uint8_t *command_id = &(data[0]);
     uint8_t *command_data = &(data[1]);
     switch ( *command_id ) {
-        case id_get_keyboard_value:
+        case id_custom_get_value:
             {
                 switch(command_data[0]) {
 #ifdef RGB_MATRIX_ENABLE
@@ -313,7 +313,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length)
                 }
                 break;
             }
-        case id_set_keyboard_value:
+        case id_custom_set_value:
             {
                 switch(command_data[0]) {
 #ifdef RGB_MATRIX_ENABLE
