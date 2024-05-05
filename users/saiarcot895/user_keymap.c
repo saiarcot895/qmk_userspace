@@ -1,6 +1,6 @@
-#include <rgb_matrix.h>
-#include <raw_hid.h>
+#include QMK_KEYBOARD_H
 #include <via.h>
+#include <raw_hid.h>
 #include "action_layer.h"
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"

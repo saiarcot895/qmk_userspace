@@ -10,6 +10,7 @@ RGB_MATRIX_EFFECT(CUSTOM_DIGITAL_RAIN)
 bool CUSTOM_DIGITAL_RAIN(effect_params_t* params) {
     // algorithm ported from https://github.com/tremby/Kaleidoscope-LEDEffect-DigitalRain
     uint8_t speed = rgb_matrix_config.speed > 0 ? rgb_matrix_config.speed : 1;
+    HSV hsv = rgb_matrix_config.hsv;
     uint16_t drop_ticks                 = 1792 / speed;
     const uint8_t pure_green_intensity = 0xd0;
     const uint8_t max_brightness_boost = 0xc0;
@@ -53,12 +54,9 @@ bool CUSTOM_DIGITAL_RAIN(effect_params_t* params) {
                     const uint8_t boost = (uint8_t)((uint16_t)max_brightness_boost * (g_rgb_frame_buffer[row][col] - pure_green_intensity) / (max_intensity - pure_green_intensity));
                     rgb_matrix_set_color(led[0], boost, max_intensity, boost);
                 } else {
-                    const uint8_t green = (uint8_t)((uint16_t)max_intensity * g_rgb_frame_buffer[row][col] / pure_green_intensity);
-                    if (host_keyboard_led_state().caps_lock) {
-                        rgb_matrix_set_color(led[0], green, 0, 0);
-                    } else {
-                        rgb_matrix_set_color(led[0], 0, green, 0);
-                    }
+                    hsv.v = (uint8_t)((uint16_t)hsv.v * g_rgb_frame_buffer[row][col] / pure_green_intensity);
+                    RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
+                    rgb_matrix_set_color(led[0], rgb.r, rgb.g, rgb.b);
                 }
             }
         }
