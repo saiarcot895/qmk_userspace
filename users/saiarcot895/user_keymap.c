@@ -51,11 +51,9 @@ static void emotes_finished(tap_dance_state_t *state, void *user_data) {
     if (state->count == 2) {
         layer_move(EMOTE_SOURCE);
     } else if (state->count == 3) {
-        if (IS_LAYER_ON_STATE(layer_state, MODTAP)) {
-            modtap_mode = 0;
+        if (IS_LAYER_ON(MODTAP)) {
             layer_move(BASE);
         } else {
-            modtap_mode = 1;
             layer_move(MODTAP);
         }
     } else if (state->count == 4) {
@@ -63,11 +61,9 @@ static void emotes_finished(tap_dance_state_t *state, void *user_data) {
     }
 #else
     if (state->count == 2) {
-        if (IS_LAYER_ON_STATE(layer_state, MODTAP)) {
-            modtap_mode = 0;
+        if (IS_LAYER_ON(MODTAP)) {
             layer_move(BASE);
         } else {
-            modtap_mode = 1;
             layer_move(MODTAP);
         }
     } else if (state->count == 3) {
@@ -91,6 +87,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         emote_repeat_count = 1;
     }
 #endif
+    if (IS_LAYER_ON_STATE(state, MODTAP)) {
+        modtap_mode = 1;
+    } else {
+        modtap_mode = 0;
+    }
     set_keyboard_mode_color_scheme();
     return state;
 }
