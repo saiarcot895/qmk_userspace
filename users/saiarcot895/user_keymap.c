@@ -8,8 +8,9 @@
 user_config_t user_config;
 uint8_t current_game = GAME_NONE;
 #ifdef TWITCH_EMOTES
-uint8_t emote_repeat_count = 0;
+static uint8_t emote_repeat_count = 0;
 #endif
+static uint8_t modtap_mode = 0;
 
 enum keyboard_command_id {
   kb_enable_backlight,
@@ -49,19 +50,48 @@ static void emotes_finished(tap_dance_state_t *state, void *user_data) {
 #ifdef TWITCH_EMOTES
     if (state->count == 2) {
         layer_move(EMOTE_SOURCE);
-        emote_repeat_count = 1;
     } else if (state->count == 3) {
-        layer_move(MODTAP);
+        if (IS_LAYER_ON_STATE(layer_state, MODTAP)) {
+            modtap_mode = 0;
+            layer_move(BASE);
+        } else {
+            modtap_mode = 1;
+            layer_move(MODTAP);
+        }
     } else if (state->count == 4) {
         layer_move(MOUSE);
     }
 #else
     if (state->count == 2) {
-        layer_move(MODTAP);
+        if (IS_LAYER_ON_STATE(layer_state, MODTAP)) {
+            modtap_mode = 0;
+            layer_move(BASE);
+        } else {
+            modtap_mode = 1;
+            layer_move(MODTAP);
+        }
     } else if (state->count == 3) {
         layer_move(MOUSE);
     }
 #endif
+}
+
+static void set_keyboard_mode_color_scheme(void) {
+    if (modtap_mode) {
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_HUE_WAVE);
+    } else {
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+    }
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+#ifdef TWITCH_EMOTES
+    if (IS_LAYER_ON_STATE(state, EMOTE_SOURCE)) {
+        emote_repeat_count = 1;
+    }
+#endif
+    set_keyboard_mode_color_scheme();
+    return state;
 }
 
 #ifdef TWITCH_EMOTES
@@ -279,10 +309,10 @@ void raw_hid_receive(uint8_t *data, uint8_t length)
                     case kb_rgb_mode:
                         {
                             uint8_t mode = rgb_matrix_get_mode();
-                            if (mode == RGB_MATRIX_RAINBOW_MOVING_CHEVRON) {
-                                command_data[1] = computer_active;
-                            } else if (mode == RGB_MATRIX_CUSTOM_CUSTOM_DIGITAL_RAIN) {
+                            if (mode == RGB_MATRIX_CUSTOM_CUSTOM_DIGITAL_RAIN) {
                                 command_data[1] = computer_locked;
+                            } else {
+                                command_data[1] = computer_active;
                             }
                             break;
                         }
@@ -339,7 +369,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length)
                         {
                             enum rgb_modes rgb_mode = command_data[1];
                             if (rgb_mode == computer_active) {
-                                rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+                                set_keyboard_mode_color_scheme();
                                 rgb_matrix_set_speed_noeeprom(128);
                             } else if (rgb_mode == computer_locked || rgb_mode == computer_screensaver) {
                                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_CUSTOM_DIGITAL_RAIN);

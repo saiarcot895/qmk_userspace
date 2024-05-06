@@ -153,24 +153,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 
-#ifdef TWITCH_EMOTES
-extern uint8_t emote_repeat_count;
-#endif
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-#ifdef TWITCH_EMOTES
-    if (IS_LAYER_ON_STATE(state, EMOTE_SOURCE)) {
-        emote_repeat_count = 1;
-    }
-#endif
-    if (IS_LAYER_ON_STATE(state, MODTAP)) {
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_HUE_WAVE);
-    } else {
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
-    }
-    return state;
-}
-
 void keyboard_post_init_user(void) {
     // Call the keymap level matrix init.
     debug_enable = true;
