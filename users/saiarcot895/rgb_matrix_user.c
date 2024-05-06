@@ -88,10 +88,11 @@ void rgb_matrix_init_user(void) {
 }
 
 static bool is_caps_lock_indicator(uint16_t keycode) {
+    uint16_t basic_keycode = QK_MODS_GET_BASIC_KEYCODE(keycode);
 #ifdef CAPS_LOCK_INDICATOR_LIGHT_ALPHAS
-    return (KC_A <= keycode && keycode <= KC_Z) || keycode == KC_CAPS;
+    return (KC_A <= basic_keycode && basic_keycode <= KC_Z) || basic_keycode == KC_CAPS;
 #else
-    return keycode == KC_CAPS;
+    return basic_keycode == KC_CAPS;
 #endif
 }
 
@@ -101,6 +102,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t current_layer = get_highest_layer(layer_state);
     switch (current_layer) {
         case BASE:
+        case MODTAP:
             if (current_game && current_game <= MAX_GAME_VALUE && game_rgb_mappings[current_game]) {
                 rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, game_rgb_mappings[current_game], RGB_OFF);
                 break;
@@ -110,11 +112,6 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, is_caps_lock_indicator, CAPS_LOCK_INDICATOR_COLOR);
                 break;
             }
-#endif
-            break;
-        case FUNCTION:
-#ifdef FN_LAYER_TRANSPARENT_KEYS_OFF
-            rgb_matrix_set_color_by_keycode(led_min, led_max, current_layer, is_transparent, RGB_OFF);
 #endif
             break;
         default:

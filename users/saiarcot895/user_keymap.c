@@ -78,7 +78,8 @@ static void emotes_finished(tap_dance_state_t *state, void *user_data) {
 
 static void set_keyboard_mode_color_scheme(void) {
     if (modtap_mode) {
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_HUE_WAVE);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_HUE_BREATHING);
+        rgb_matrix_sethsv_noeeprom(180, 255, 128);
     } else {
         rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
     }
@@ -339,7 +340,6 @@ void raw_hid_receive(uint8_t *data, uint8_t length)
                             enum rgb_modes rgb_mode = command_data[1];
                             if (rgb_mode == computer_active) {
                                 set_keyboard_mode_color_scheme();
-                                rgb_matrix_set_speed_noeeprom(128);
                             } else if (rgb_mode == computer_locked || rgb_mode == computer_screensaver) {
                                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_CUSTOM_DIGITAL_RAIN);
                             }
