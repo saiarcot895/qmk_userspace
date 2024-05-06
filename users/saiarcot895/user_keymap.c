@@ -212,37 +212,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("plasmashell" SS_DELAY(500) SS_TAP(X_ENTER));
             }
             return false;  // Skip all further processing of this key
-        case WORDLE:
-            if (record->event.pressed) {
-                SEND_STRING(SS_TAP(X_LGUI));
-                SEND_STRING(SS_DELAY(750));
-                SEND_STRING("Chromium" SS_DELAY(300) SS_TAP(X_ENTER));
-                SEND_STRING(SS_DELAY(1500));
-                SEND_STRING("https://www.nytimes.com/games/wordle/index.html" SS_TAP(X_ENTER));
-                SEND_STRING(SS_LCTL(SS_TAP(X_T)));
-                SEND_STRING(SS_DELAY(1000));
-                SEND_STRING("https://www.quordle.com/" SS_TAP(X_ENTER));
-                SEND_STRING(SS_LCTL(SS_TAP(X_T)));
-                SEND_STRING(SS_DELAY(1000));
-                SEND_STRING("https://wafflegame.net/" SS_TAP(X_ENTER));
-                SEND_STRING(SS_LCTL(SS_TAP(X_T)));
-                SEND_STRING(SS_DELAY(1000));
-                SEND_STRING("https://discord.com/channels/721037447382696050/937596273199030323" SS_TAP(X_ENTER));
-                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
-                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
-                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
-                SEND_STRING("homie" SS_TAP(X_ENTER));
-                SEND_STRING(SS_DELAY(100));
-                SEND_STRING(SS_LCTL(SS_TAP(X_TAB)) SS_DELAY(150));
-                SEND_STRING("homie" SS_TAP(X_ENTER));
-                SEND_STRING(SS_DELAY(200));
-                SEND_STRING("tunas" SS_TAP(X_ENTER));
-                SEND_STRING(SS_DELAY(200));
-                SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))) SS_DELAY(150));
-                SEND_STRING(SS_DELAY(500));
-                SEND_STRING("tunas" SS_TAP(X_ENTER));
-            }
-            return false;  // Skip all further processing of this key
 #ifdef TWITCH_EMOTES
         case KC_1:
         case KC_2:
