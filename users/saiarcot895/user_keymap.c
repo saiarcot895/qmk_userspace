@@ -51,10 +51,14 @@ static void emotes_finished(tap_dance_state_t *state, void *user_data) {
         layer_move(EMOTE_SOURCE);
         emote_repeat_count = 1;
     } else if (state->count == 3) {
+        layer_move(MODTAP);
+    } else if (state->count == 4) {
         layer_move(MOUSE);
     }
 #else
     if (state->count == 2) {
+        layer_move(MODTAP);
+    } else if (state->count == 3) {
         layer_move(MOUSE);
     }
 #endif
