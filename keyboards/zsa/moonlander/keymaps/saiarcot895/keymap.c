@@ -22,6 +22,7 @@
 #include QMK_KEYBOARD_H
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"
+#include "qmk_structures.c"
 
 static bool prev_transport_connected = true;
 

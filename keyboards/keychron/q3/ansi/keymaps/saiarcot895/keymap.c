@@ -18,6 +18,7 @@
 #include QMK_KEYBOARD_H
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"
+#include "qmk_structures.c"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 

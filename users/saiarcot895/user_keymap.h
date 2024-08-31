@@ -69,5 +69,6 @@ typedef union {
 } user_config_t;
 
 extern user_config_t user_config;
+extern tap_dance_action_t tap_dance_actions[];
 
 // clang-format on
