@@ -29,11 +29,7 @@ static bool prev_transport_connected = true;
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT(
-#ifdef TWITCH_EMOTES
-        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    TO(EMOTE_SOURCE), XXXXXXX,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-#else
-        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    TO(MODTAP),   TO(MODTAP),  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-#endif
+        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    TD(TD_EMOTES),   TD(TD_EMOTES),  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
         KC_DEL,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    TG(FUNCTION), TG(FUNCTION), KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
         KC_BSPC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_HYPR,           KC_MEH,  KC_H,    KC_J,    KC_K,    KC_L,    LT(MOUSE, KC_SCLN), KC_QUOT,
         KC_LSFT, LCTL_T(KC_Z),KC_X,KC_C,    KC_V,    KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  RCTL_T(KC_SLSH), KC_RSFT,
@@ -42,15 +38,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [MODTAP] = LAYOUT(
-#ifdef TWITCH_EMOTES
-        KC_EQL,  KC_1,        KC_2,        KC_3,        KC_4,  KC_5,    TO(EMOTE_SOURCE), XXXXXXX,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-#else
-        KC_EQL,  KC_1,        KC_2,        KC_3,        KC_4,  KC_5,    TO(BASE),        TO(BASE),  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
-#endif
+        KC_EQL,  KC_1,        KC_2,        KC_3,        KC_4,  KC_5,    TD(TD_EMOTES),TD(TD_EMOTES),  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
         KC_DEL,  KC_Q,        KC_W,        KC_E,        KC_R,  KC_T,    TG(FUNCTION), TG(FUNCTION), KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
         KC_BSPC, KC_A, LALT_T(KC_S),LSFT_T(KC_D),LCTL_T(KC_F), KC_G,    KC_HYPR,           KC_MEH,  KC_H,RCTL_T(KC_J),RSFT_T(KC_K),RALT_T(KC_L),LT(MOUSE, KC_SCLN), KC_QUOT,
-        KC_LSFT, KC_Z,        KC_X,        KC_C,        KC_V,  KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  RCTL_T(KC_SLSH), KC_RSFT,
-    LT(FUNCTION,KC_GRV),KC_NO,XXXXXXX,KC_LEFT, KC_RGHT,  KC_LALT,         RCTL_T(KC_ESC), KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, MO(FUNCTION),
+        KC_LSFT, KC_Z,        KC_X,        KC_C,        KC_V,  KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+    LT(FUNCTION,KC_GRV),KC_NO,XXXXXXX,KC_LEFT, KC_RGHT,  KC_LALT,                 KC_ESC, KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, MO(FUNCTION),
                                             KC_SPC,  KC_BSPC, KC_LGUI,           KC_LALT, KC_TAB,  KC_ENT
     ),
 
@@ -59,12 +51,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         DISPLAY_2, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, _______,           _______, KC_CIRC, KC_AMPR, KC_ASTR, _______, _______, KC_F12,
         _______, KC_LPRN, KC_RPRN, _______, _______, KC_GRV,  _______,           _______, _______, KC_UP,   _______, _______, _______, _______,
         _______, KC_LBRC, KC_RBRC, _______, _______, KC_TILD,                             KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______,
-        _______, _______, _______, _______, _______,          _______,           _______,          _______, KC_DOT,  _______, _______, _______,
+        _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
 
     [MOUSE] = LAYOUT(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TD(TD_EMOTES), TD(TD_EMOTES), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
         XXXXXXX, XXXXXXX, KC_MS_U, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, EE_CLR,
         XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                             XXXXXXX, KC_MPLY, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
