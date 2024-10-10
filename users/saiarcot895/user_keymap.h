@@ -54,6 +54,14 @@ enum custom_keycodes {
     BTTV_CAT,
     BTTV_SWAY,
 #endif
+    SMTD_KEYCODES_BEGIN,
+    CKC_S,
+    CKC_D,
+    CKC_F,
+    CKC_J,
+    CKC_K,
+    CKC_L,
+    SMTD_KEYCODES_END,
 };
 
 enum {

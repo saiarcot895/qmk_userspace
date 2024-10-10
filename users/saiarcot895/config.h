@@ -87,3 +87,5 @@
 #endif
 
 #define AUDIO_INIT_DELAY
+
+#define MAX_DEFERRED_EXECUTORS 10

@@ -4,6 +4,7 @@
 #include "action_layer.h"
 #include "user_keymap.h"
 #include "rgb_matrix_user.h"
+#include "sm_td/sm_td.h"
 
 user_config_t user_config;
 uint8_t current_game = GAME_NONE;
@@ -181,6 +182,10 @@ static void send_emote(uint16_t keycode) {
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_smtd(keycode, record)) {
+        return false;
+    }
+
 #ifdef TWITCH_EMOTES
     uint8_t current_layer = 0;
 #endif
@@ -250,6 +255,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
         default:
             return true;  // Process all other keycodes normally
+    }
+}
+
+void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) {
+    switch (keycode) {
+        SMTD_MT(CKC_S, KC_S, KC_LEFT_ALT)
+        SMTD_MT(CKC_D, KC_D, KC_LSFT)
+        SMTD_MT(CKC_F, KC_F, KC_LEFT_CTRL)
+        SMTD_MT(CKC_J, KC_J, KC_RIGHT_CTRL)
+        SMTD_MT(CKC_K, KC_K, KC_RSFT)
+        SMTD_MT(CKC_L, KC_L, KC_RIGHT_ALT)
     }
 }
 

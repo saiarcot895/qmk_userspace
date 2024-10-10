@@ -40,7 +40,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MODTAP] = LAYOUT(
         KC_EQL,  KC_1,        KC_2,        KC_3,        KC_4,  KC_5,    TD(TD_EMOTES),TD(TD_EMOTES),  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
         KC_DEL,  KC_Q,        KC_W,        KC_E,        KC_R,  KC_T,    TG(FUNCTION), TG(FUNCTION), KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
-        KC_BSPC, KC_A, LALT_T(KC_S),LSFT_T(KC_D),LCTL_T(KC_F), KC_G,    KC_HYPR,           KC_MEH,  KC_H,RCTL_T(KC_J),RSFT_T(KC_K),RALT_T(KC_L),LT(MOUSE, KC_SCLN), KC_QUOT,
+        KC_BSPC, KC_A,       CKC_S,       CKC_D,       CKC_F,  KC_G,    KC_HYPR,           KC_MEH,  KC_H,   CKC_J,   CKC_K,   CKC_L,LT(MOUSE, KC_SCLN), KC_QUOT,
         KC_LSFT, KC_Z,        KC_X,        KC_C,        KC_V,  KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
     LT(FUNCTION,KC_GRV),KC_NO,XXXXXXX,KC_LEFT, KC_RGHT,  KC_LALT,                 KC_ESC, KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, MO(FUNCTION),
                                             KC_SPC,  KC_BSPC, KC_LGUI,           KC_LALT, KC_TAB,  KC_ENT
