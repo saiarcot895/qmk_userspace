@@ -14,7 +14,7 @@ static uint8_t emote_repeat_count = 0;
 static uint8_t modtap_mode = 0;
 
 enum keyboard_command_id {
-  kb_enable_backlight,
+  kb_enable_backlight = 0x80,
   kb_rgb_mode,
   kb_rgb_speed,
   kb_game,
@@ -260,12 +260,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) {
     switch (keycode) {
-        SMTD_MT(CKC_S, KC_S, KC_LEFT_ALT)
-        SMTD_MT(CKC_D, KC_D, KC_LSFT)
-        SMTD_MT(CKC_F, KC_F, KC_LEFT_CTRL)
-        SMTD_MT(CKC_J, KC_J, KC_RIGHT_CTRL)
-        SMTD_MT(CKC_K, KC_K, KC_RSFT)
-        SMTD_MT(CKC_L, KC_L, KC_RIGHT_ALT)
+        SMTD_MT(CKC_S, KC_S, KC_LEFT_ALT, 2)
+        SMTD_MT(CKC_D, KC_D, KC_LSFT, 2)
+        SMTD_MT(CKC_F, KC_F, KC_LEFT_CTRL, 2)
+        SMTD_MT(CKC_J, KC_J, KC_RIGHT_CTRL, 2)
+        SMTD_MT(CKC_K, KC_K, KC_RSFT, 2)
+        SMTD_MT(CKC_L, KC_L, KC_RIGHT_ALT, 2)
     }
 }
 
